@@ -1,8 +1,8 @@
 import asyncio
 from enum import Enum
-from typing import List
+from typing import List, Annotated
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -35,6 +35,15 @@ def read_root():
 async def read_items():
     items = await mok_db_query()
     return items
+
+
+async def common_parameters(q: str | None = None, skip: int = 0, limit: int = 100):
+    return {"q": q, "skip": skip, "limit": limit}
+
+
+@app.get("/items/inject")
+async def read_items(commons: Annotated[dict, Depends(common_parameters)]):
+    return commons
 
 
 @app.get("/models/{model_name}")
