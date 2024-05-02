@@ -56,3 +56,8 @@ def query(q: str = None):
 @app.post("/items/")
 async def create_item(item: Item):
     return item.dict()
+
+
+@app.put("/items/{item_id}")
+async def update_item(item_id: int, item: Item):
+    return {"item_id": item_id, **item.dict()}
