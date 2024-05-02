@@ -11,6 +11,9 @@ app = FastAPI()
 class Item(BaseModel):
     name: str
 
+    class Config:
+        extra = "forbid"
+
 
 class ModelName(str, Enum):
     alexnet = "alexnet"
@@ -48,3 +51,8 @@ async def get_model(model_name: ModelName):
 @app.get("/practice/query")
 def query(q: str = None):
     return q
+
+
+@app.post("/items/")
+async def create_item(item: Item):
+    return item.dict()
