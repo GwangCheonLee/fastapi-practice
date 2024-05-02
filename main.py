@@ -2,7 +2,7 @@ import asyncio
 from enum import Enum
 from typing import List, Annotated
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Header, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -70,3 +70,21 @@ async def create_item(item: Item):
 @app.put("/items/{item_id}")
 async def update_item(item_id: int, item: Item):
     return {"item_id": item_id, **item.dict()}
+
+
+async def verify_token(x_token: Annotated[str, Header()]):
+    print(x_token)
+    if x_token != "fake-super-secret-token":
+        raise HTTPException(status_code=400, detail="X-Token header invalid")
+
+
+async def verify_key(x_key: Annotated[str, Header()]):
+    print(x_key)
+    if x_key != "fake-super-secret-key":
+        raise HTTPException(status_code=400, detail="X-Key header invalid")
+    return x_key
+
+
+@app.get("/items/dependency", dependencies=[Depends(verify_token), Depends(verify_key)])
+async def read_items():
+    return [{"item": "Foo"}, {"item": "Bar"}]
