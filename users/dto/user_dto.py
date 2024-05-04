@@ -1,3 +1,5 @@
+from typing import Union
+
 from passlib.context import CryptContext
 from pydantic import BaseModel, field_validator
 
@@ -7,7 +9,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class BaseUserDto(BaseModel):
     name: str
     email: str
-    password: str
+    password: Union[str, None]
 
     def hash_password(self):
         self.password = pwd_context.hash(self.password)

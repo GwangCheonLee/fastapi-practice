@@ -12,4 +12,4 @@ class User(Base):
     password = Column(String)
 
     def to_dto(self):
-        return UserDto(id=self.id, name=self.name, email=self.email, password=self.password)
+        return UserDto(id=self.id, name=self.name, email=self.email, password=None)

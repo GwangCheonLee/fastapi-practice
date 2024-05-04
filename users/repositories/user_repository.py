@@ -1,6 +1,6 @@
 from config.database import Session
 from models.user import User
-from users.dto.user_dto import UserDto
+from users.dto.user_dto import UserDto, CreateUserDto
 
 
 class UserRepository:
@@ -13,4 +13,15 @@ class UserRepository:
 
     def get_one_user_by_id(self, user_id: int) -> UserDto:
         user: User = self.session.query(User).filter(User.id == user_id).one()
+        return user.to_dto()
+
+    def save_user(self, create_user_dto: CreateUserDto, session: Session) -> UserDto:
+        user = User(
+            name=create_user_dto.name,
+            email=create_user_dto.email,
+            password=create_user_dto.password
+        )
+
+        session.add(user)
+        session.commit()
         return user.to_dto()
