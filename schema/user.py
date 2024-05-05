@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from models import Base
+from schema import Base
 from users.dto.user_dto import UserDto
 
 

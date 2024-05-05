@@ -1,5 +1,5 @@
 from config.database import Session
-from models.user import User
+from schema.user import User
 from users.dto.user_dto import UserDto, CreateUserDto
 
 
