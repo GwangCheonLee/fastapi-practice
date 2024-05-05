@@ -1,16 +1,18 @@
-from passlib.context import CryptContext
-from pydantic import BaseModel, field_validator
+from typing import Union
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
+from pydantic import BaseModel, field_validator
 
 
 class BaseUserDto(BaseModel):
     name: str
     email: str
-    password: str | None
+    password: Union[str, None]
 
-    def hash_password(self):
-        self.password = pwd_context.hash(self.password)
+    def hash_password(cls, value):
+        if value is None:
+            return value
+        return bcrypt.hashpw(value.encode(), bcrypt.gensalt()).decode()
 
 
 class UserDto(BaseUserDto):
@@ -20,4 +22,4 @@ class UserDto(BaseUserDto):
 class CreateUserDto(BaseUserDto):
     @field_validator('password')
     def hash_password(cls, value):
-        return pwd_context.hash(value)
+        return bcrypt.hashpw(value.encode(), bcrypt.gensalt()).decode()
