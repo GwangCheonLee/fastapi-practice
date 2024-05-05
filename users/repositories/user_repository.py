@@ -15,6 +15,10 @@ class UserRepository:
         user: User = self.session.query(User).filter(User.id == user_id).one()
         return user.to_dto()
 
+    def get_one_user_by_email(self, email: str) -> UserDto:
+        user: User = self.session.query(User).filter(User.email == email).one()
+        return UserDto(id=user.id, name=user.name, email=user.email, password=user.password)
+
     @staticmethod
     def save_user(create_user_dto: CreateUserDto, session: Session) -> UserDto:
         user = User(
