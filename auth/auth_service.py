@@ -17,7 +17,7 @@ def sign_in(sign_in_dto: SignInDto, session: Session) -> SignInResponse:
 
     is_password_valid: bool = verify_password(sign_in_dto.password, user.password)
     if is_password_valid:
-        access_token = create_access_token(data={"user": {"email": user.email, "id": user.id}},
+        access_token = create_access_token(data={"user": {"email": user.email, "id": user.id, "name": user.name}},
                                            expires_delta=timedelta(minutes=setting.jwt_expires),
                                            secret_key=setting.jwt_secret, algorithm=setting.jwt_algorithm)
 

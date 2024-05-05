@@ -3,6 +3,8 @@ from typing import Union
 from fastapi import APIRouter, Depends
 
 from config.database import Session, get_db
+from filters.jwt_filter import jwt_filter
+from schema import User
 from users import users_service
 from users.dto.user_dto import UserDto, CreateUserDto
 
@@ -10,7 +12,7 @@ router = APIRouter()
 
 
 @router.get("/users", tags=["users"], response_model=list[UserDto])
-async def read_users(session: Session = Depends(get_db)):
+async def read_users(session: Session = Depends(get_db), user: User = Depends(jwt_filter)):
     return users_service.get_users(session)
 
 
