@@ -15,7 +15,8 @@ class UserRepository:
         user: User = self.session.query(User).filter(User.id == user_id).one()
         return user.to_dto()
 
-    def save_user(self, create_user_dto: CreateUserDto, session: Session) -> UserDto:
+    @staticmethod
+    def save_user(create_user_dto: CreateUserDto, session: Session) -> UserDto:
         user = User(
             name=create_user_dto.name,
             email=create_user_dto.email,
@@ -23,5 +24,15 @@ class UserRepository:
         )
 
         session.add(user)
+        session.commit()
+        return user.to_dto()
+
+    @staticmethod
+    def update_user(user_id: int, create_user_dto: CreateUserDto, session: Session) -> UserDto:
+        user = session.query(User).filter(User.id == user_id).one()
+        user.name = create_user_dto.name
+        user.email = create_user_dto.email
+        user.password = create_user_dto.password
+
         session.commit()
         return user.to_dto()

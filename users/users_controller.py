@@ -22,3 +22,8 @@ async def get_one_user_by_id(user_id: int, session: Session = Depends(get_db)):
 @router.post("/users", tags=["users"], response_model=Union[UserDto, None])
 async def create_user(create_user_dto: CreateUserDto, session: Session = Depends(get_db)):
     return users_service.create_user(create_user_dto=create_user_dto, session=session)
+
+
+@router.put("/users/{user_id}", tags=["users"], response_model=Union[UserDto, None])
+async def update_user(user_id: int, create_user_dto: CreateUserDto, session: Session = Depends(get_db)):
+    return users_service.update_user(user_id=user_id, create_user_dto=create_user_dto, session=session)

@@ -16,3 +16,8 @@ def get_one_user_by_id(session: Session, user_id: int) -> UserDto:
 def create_user(create_user_dto: CreateUserDto, session: Session) -> UserDto:
     userRepository: UserRepository = UserRepository(session)
     return userRepository.save_user(create_user_dto, session)
+
+
+def update_user(user_id: int, create_user_dto: CreateUserDto, session: Session) -> UserDto:
+    userRepository: UserRepository = UserRepository(session)
+    return userRepository.update_user(user_id=user_id, create_user_dto=create_user_dto, session=session)
